@@ -1,0 +1,20 @@
+# A lone anomalous login from a traveling executive. The policy must NOT contain on one weak
+# signal; the correct outcome is "watch" only. This scenario guards against over-blocking
+# (which is how automatic containment loses business trust and gets switched off).
+
+name: single-alert-false-positive
+description: "One anomalous login for the CEO while traveling; expected outcome: notify only"
+attacker_exfil_minute: 72
+attacker_milestones:
+  - {minute: 0, label: "login from new country (legitimate travel)"}
+
+events:
+  - minute: 0
+    signal: anomalous_login
+    detect_delay: 5
+    source: sentinel
+    confidence: 0.8
+    entity: {type: user, id: "ceo@example.com", platform: entra}
+
+approvals: []
+expect: no_action

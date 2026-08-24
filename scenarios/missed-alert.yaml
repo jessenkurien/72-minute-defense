@@ -1,0 +1,41 @@
+# The credential-dumping detection never fires (coverage gap). Does the chain still cross the
+# threshold on the remaining signals before minute 72? This is the "what if one alert doesn't
+# trigger" question, answered with a number.
+
+name: missed-alert
+description: "Same as fast-72 but credential dumping is never detected"
+attacker_exfil_minute: 72
+attacker_milestones:
+  - {minute: 0,  label: "stolen-credential login"}
+  - {minute: 8,  label: "credential dumping (UNDETECTED)"}
+  - {minute: 16, label: "RMM tool installed"}
+  - {minute: 28, label: "mass file enumeration"}
+  - {minute: 42, label: "backup tampering"}
+
+events:
+  - minute: 0
+    signal: anomalous_login
+    detect_delay: 6
+    source: sentinel
+    entity: {type: user, id: "m.roe@example.com", platform: entra}
+    related: [{type: host, id: "ws-2210", platform: defender}]
+  - minute: 16
+    signal: rmm_tool_installed
+    detect_delay: 2
+    source: sentinel
+    entity: {type: host, id: "ws-2210", platform: defender}
+    related: [{type: user, id: "m.roe@example.com", platform: entra}]
+  - minute: 28
+    signal: mass_file_enumeration
+    detect_delay: 3
+    source: splunk
+    entity: {type: user, id: "m.roe@example.com", platform: entra}
+    related: [{type: host, id: "ws-2210", platform: defender}]
+  - minute: 42
+    signal: backup_tamper
+    detect_delay: 1
+    source: sentinel
+    entity: {type: user, id: "m.roe@example.com", platform: entra}
+    related: [{type: host, id: "ws-2210", platform: defender}]
+
+approvals: []

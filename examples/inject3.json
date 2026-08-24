@@ -1,0 +1,18 @@
+[
+  {
+    "AlertName": "Volume shadow copy deletion",
+    "TimeGenerated": "2026-08-24T02:50:00Z",
+    "SystemAlertId": "sa-2001",
+    "Entities": [
+      {
+        "Type": "host",
+        "HostName": "pay-app-03"
+      },
+      {
+        "Type": "account",
+        "Name": "j.doe",
+        "UPNSuffix": "example.com"
+      }
+    ]
+  }
+]

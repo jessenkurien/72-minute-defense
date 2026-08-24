@@ -1,0 +1,19 @@
+[
+  {
+    "AlertName": "Backup deleted or retention reduced",
+    "TimeGenerated": "2026-08-24T03:10:00Z",
+    "SystemAlertId": "sa-3001",
+    "Entities": [
+      {
+        "Type": "account",
+        "Name": "j.doe",
+        "UPNSuffix": "example.com"
+      },
+      {
+        "Type": "host",
+        "MdatpDeviceId": "9f1c2e3d4b5a6978",
+        "HostName": "ws-4471"
+      }
+    ]
+  }
+]

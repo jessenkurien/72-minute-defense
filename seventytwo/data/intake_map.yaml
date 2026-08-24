@@ -1,0 +1,57 @@
+# Vendor alert name → precursor signal. Extend with your own rule names; unmapped alerts are
+# reported and ignored (they never move a score).
+
+sentinel:
+  "Anomalous sign-in location by user account": anomalous_login
+  "Atypical travel": anomalous_login
+  "MFA fatigue / repeated push denials": mfa_fatigue
+  "New MFA method registered": new_mfa_device
+  "Suspicious credential dump (LSASS access)": credential_dumping
+  "Potential Kerberoasting": kerberoasting
+  "Unapproved remote management tool installed": rmm_tool_installed
+  "Active Directory enumeration (SharpHound/AdFind)": ad_enumeration
+  "Mass file access on file share": mass_file_enumeration
+  "Backup deleted or retention reduced": backup_tamper
+  "Volume shadow copy deletion": shadow_copy_deletion
+  "Defender tampering detected": edr_tamper
+  "Diagnostic settings / audit logging disabled": logging_disabled
+  "Rclone or MEGA client execution": exfil_tool_present
+  "Large archive creation in user directory": archive_staging
+  "Anomalous outbound data volume": bulk_egress
+  "Ransomware activity detected": ransomware_binary
+
+splunk:
+  "ESCU - Anomalous Login Location": anomalous_login
+  "ESCU - Okta MFA Push Fatigue": mfa_fatigue
+  "ESCU - Credential Dumping via LSASS Access": credential_dumping
+  "ESCU - Kerberoasting spn request": kerberoasting
+  "ESCU - Remote Monitoring Tool Installed": rmm_tool_installed
+  "ESCU - AdFind / BloodHound Enumeration": ad_enumeration
+  "ESCU - High File Share Enumeration": mass_file_enumeration
+  "ESCU - Backup Software Disabled or Deleted": backup_tamper
+  "ESCU - Shadow Copies Deletion Using vssadmin": shadow_copy_deletion
+  "ESCU - Attempt To Stop Security Service": edr_tamper
+  "ESCU - Rclone Execution": exfil_tool_present
+  "ESCU - Large Outbound Transfer": bulk_egress
+  "ESCU - Known Ransomware Execution": ransomware_binary
+
+falcon:
+  "CredentialDumping": credential_dumping
+  "LSASSAccess": credential_dumping
+  "RemoteAccessTool": rmm_tool_installed
+  "DiscoveryTool": ad_enumeration
+  "ShadowCopyDeletion": shadow_copy_deletion
+  "SensorTampering": edr_tamper
+  "BackupTampering": backup_tamper
+  "DataExfilTool": exfil_tool_present
+  "Ransomware": ransomware_binary
+
+guardduty:
+  "UnauthorizedAccess:IAMUser/AnomalousBehavior": anomalous_login
+  "CredentialAccess:IAMUser/AnomalousBehavior": token_theft
+  "Discovery:IAMUser/AnomalousBehavior": cloud_recon
+  "DefenseEvasion:IAMUser/AnomalousBehavior": logging_disabled
+  "Stealth:IAMUser/CloudTrailLoggingDisabled": logging_disabled
+  "Policy:S3/BucketAnonymousAccessGranted": snapshot_shared_external
+  "Exfiltration:S3/AnomalousBehavior": bulk_egress
+  "Impact:EC2/AbusedDomainRequest.Reputation": ransomware_binary

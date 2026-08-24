@@ -1,0 +1,75 @@
+# Bundled copy of policy/containment-authority.yaml for installed-wheel defaults.
+# tests/test_packaging.py requires this copy to remain byte-for-byte synchronized.
+version: 3
+organization: "Example Corp (template — replace)"
+template: true
+effective_from: 2026-09-01
+review_by: 2027-03-01
+attacker_clock_minutes: 72
+critical_signals_force_tier: contain
+
+tiers:
+  - name: watch
+    threshold: 25
+    authority: automatic
+    actions: [notify]
+    accepted_impact: "None. Analyst is paged; no user-visible effect."
+    notify: ["soc-oncall"]
+
+  - name: friction
+    threshold: 40
+    authority: automatic
+    actions: [identity.revoke_sessions]
+    ceiling: {users: 50, service_principals: 5}
+    mandatory_review_minutes: 240
+    accepted_impact: >
+      Up to 50 users may be forced to re-authenticate without notice. A deployment must
+      replace this example with its own accepted-impact statement and helpdesk runbook.
+    notify: ["soc-oncall", "helpdesk"]
+
+  - name: contain
+    threshold: 65
+    authority: automatic
+    actions: [identity.disable_user, endpoint.isolate_host, identity.revoke_sessions, cloud.deactivate_keys, backup.lock_vault]
+    ceiling: {users: 10, hosts: 10, service_principals: 5, backup_vaults: 5}
+    mandatory_review_minutes: 720
+    accepted_impact: >
+      Up to 10 user accounts disabled and 10 endpoints network-isolated automatically, for up to
+      12 hours before mandatory IR-lead review. Production servers tagged criticality=high or
+      crown_jewel are excluded from automatic isolation (see protections) and escalate instead.
+      Compromised IAM users may have static keys deactivated; service principals may be disabled.
+      Backup vault governance locking is permitted automatically and requires administrator review.
+    notify: ["soc-oncall", "ir-lead", "it-ops-oncall"]
+
+  - name: sever
+    threshold: 85
+    authority: two_person
+    approver_roles: ["IR Lead", "CISO", "Business Owner"]
+    actions: [cloud.quarantine_account, identity.disable_service_principal, cloud.deactivate_keys,
+              identity.disable_user, endpoint.isolate_host]
+    ceiling: {users: 100, hosts: 100, cloud_accounts: 3, service_principals: 20}
+    mandatory_review_minutes: null
+    accepted_impact: >
+      Quarantining a cloud account or disabling workload identities can take a business
+      service offline. Requires two distinct approvers from the listed roles, recorded in the
+      audit log with a ticket reference. Target: approvals within 10 minutes via the IR bridge
+      (rehearsed quarterly; see docs/tabletop.md).
+    notify: ["soc-oncall", "ir-lead", "ciso", "exec-bridge"]
+
+protections:
+  principals: ["breakglass-*", "svc-backup-*", "ceo@*", "cfo@*"]
+  hosts: ["dc0*", "*-erp-db-*"]
+  criticality_at_least: crown_jewel
+  escalate_to: two_person
+
+required_attestation_roles: ["CISO", "VP Engineering", "VP Operations"]
+attestations:
+  - {role: "CISO",           name: "A. Example",  date: 2026-08-23, digest: "3b46e11051e7c8b8ce2f1b3e65b6be37aa5b8cb0d63e067be38b020e41464b4b"}
+  - {role: "VP Engineering", name: "B. Example",  date: 2026-08-23, digest: "3b46e11051e7c8b8ce2f1b3e65b6be37aa5b8cb0d63e067be38b020e41464b4b"}
+  - {role: "VP Operations",  name: "C. Example",  date: 2026-08-23, digest: "3b46e11051e7c8b8ce2f1b3e65b6be37aa5b8cb0d63e067be38b020e41464b4b"}
+
+notes: >
+  Reviewed against NIST CSF 2.0 GV.RR / RS.MA, ISO 27001:2022 A.5.24-5.28, SOC 2 CC7.4.
+  A deployment must complete its own DPO and works-council review where applicable (see
+  docs/grc/gdpr.md). This policy does not replace the incident response plan; it illustrates
+  how to pre-authorize part of its initial response window.

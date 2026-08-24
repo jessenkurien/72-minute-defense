@@ -1,0 +1,42 @@
+# Ransomware precursor catalog.
+# Each signal: stage in the chain, weight (0-100) reflecting how strongly it predicts imminent
+# ransomware, ATT&CK technique, decay (minutes until the weight halves), and whether a single
+# occurrence is "critical" (alone justifies the top tier — waiting for corroboration is how you lose).
+#
+# ATT&CK® content © 2026 The MITRE Corporation. This work is reproduced and distributed with the
+# permission of The MITRE Corporation.
+
+signals:
+  # ---- initial access ----------------------------------------------------------
+  anomalous_login:          {stage: initial_access,   weight: 15, technique: T1078,     decay: 240, desc: "Login from new geo/ASN/device or impossible travel"}
+  ia_broker_pattern:        {stage: initial_access,   weight: 25, technique: T1078,     decay: 240, desc: "Valid-account login matching initial-access-broker tradecraft (VPN + new MFA device)"}
+  mfa_fatigue:              {stage: initial_access,   weight: 20, technique: T1621,     decay: 120, desc: "Repeated MFA push denials followed by an approval"}
+  new_mfa_device:           {stage: initial_access,   weight: 15, technique: T1556.006, decay: 480, desc: "New MFA method registered shortly after login"}
+
+  # ---- credential access -------------------------------------------------------
+  credential_dumping:       {stage: credential_access, weight: 35, technique: T1003,     decay: 360, desc: "LSASS access, ntds.dit copy, DCSync, or SAM dump"}
+  kerberoasting:            {stage: credential_access, weight: 25, technique: T1558.003, decay: 360, desc: "Burst of RC4 TGS requests for service accounts"}
+  token_theft:              {stage: credential_access, weight: 30, technique: T1528,     decay: 240, desc: "OAuth/refresh token replayed from a new client"}
+
+  # ---- discovery -----------------------------------------------------------------
+  rmm_tool_installed:       {stage: discovery,        weight: 30, technique: T1219,     decay: 720, desc: "Unapproved remote-monitoring tool (AnyDesk, ScreenConnect, Atera...) installed"}
+  ad_enumeration:           {stage: discovery,        weight: 20, technique: T1087.002, decay: 360, desc: "AdFind / SharpHound / BloodHound style enumeration"}
+  mass_file_enumeration:    {stage: discovery,        weight: 20, technique: T1083,     decay: 240, desc: "Single principal enumerates thousands of files across shares"}
+  cloud_recon:              {stage: discovery,        weight: 20, technique: T1580,     decay: 240, desc: "Burst of List*/Describe* across services from one principal"}
+
+  # ---- defense evasion (the point of no return is approaching) --------------------
+  backup_tamper:            {stage: defense_evasion,  weight: 60, technique: T1490,     decay: 720, critical: true, desc: "Backup job deleted/disabled, retention shortened, or vault lock removed"}
+  shadow_copy_deletion:     {stage: defense_evasion,  weight: 60, technique: T1490,     decay: 720, critical: true, desc: "vssadmin/wmic/wbadmin shadow copy deletion"}
+  edr_tamper:               {stage: defense_evasion,  weight: 55, technique: T1562.001, decay: 720, critical: true, desc: "Sensor uninstalled, disabled, or BYOVD driver loaded"}
+  logging_disabled:         {stage: defense_evasion,  weight: 40, technique: T1562.008, decay: 720, desc: "CloudTrail/diagnostic settings/audit logging stopped"}
+  security_group_opened:    {stage: defense_evasion,  weight: 25, technique: T1562.007, decay: 360, desc: "Firewall/security group opened to 0.0.0.0/0"}
+
+  # ---- exfil staging -----------------------------------------------------------------
+  exfil_tool_present:       {stage: exfil_staging,    weight: 45, technique: T1567.002, decay: 360, desc: "Rclone / MEGAcmd / WinSCP-to-cloud staged or executing"}
+  archive_staging:          {stage: exfil_staging,    weight: 35, technique: T1560,     decay: 240, desc: "Large 7z/rar archives created in temp/user dirs"}
+  bulk_egress:              {stage: exfil_staging,    weight: 50, technique: T1048,     decay: 180, critical: true, desc: "Outbound volume >10x baseline to a new external destination"}
+  snapshot_shared_external: {stage: exfil_staging,    weight: 55, technique: T1537,     decay: 360, critical: true, desc: "Cloud snapshot/AMI/bucket shared to an external account"}
+
+  # ---- impact ---------------------------------------------------------------------------
+  ransomware_binary:        {stage: impact,           weight: 100, technique: T1486,    decay: 1440, critical: true, desc: "Known ransomware family executing or mass rename/encrypt observed"}
+  ransom_note:              {stage: impact,           weight: 100, technique: T1486,    decay: 1440, critical: true, desc: "Ransom note dropped"}

@@ -1,0 +1,108 @@
+# =============================================================================
+#  CONTAINMENT AUTHORITY POLICY  —  The 72-Minute Defense
+# =============================================================================
+#  This file is the delegation of authority that lets the SOC act at machine speed
+#  without a bridge call. Leadership decides these boundaries in a calm afternoon;
+#  the engine enforces them at 2 a.m.
+#
+#  This public example is deliberately unarmable (`template: true`). A deployment
+#  must copy it, replace Example Corp values, obtain authenticated approvals in a
+#  protected review system, pin the digest out of band, and only then remove the
+#  template flag. Digest attestations detect body changes; they do not authenticate people.
+#
+#  Manage-by-exception (PRINCE2): each tier's `ceiling` and `accepted_impact` are the
+#  tolerances the business pre-accepted. Inside them the SOC acts freely; outside them
+#  the engine escalates to the named approvers. That is the whole idea.
+# =============================================================================
+
+version: 3
+organization: "Example Corp (template — replace)"
+template: true
+effective_from: 2026-09-01
+review_by: 2027-03-01
+attacker_clock_minutes: 72          # Unit 42 GIRR 2026 quickest-quartile time-to-exfiltration benchmark
+
+# A single critical precursor (backup tampering, shadow-copy deletion, EDR tampering, bulk
+# egress, ransomware binary) jumps straight to this tier. Waiting for corroboration at that
+# point is how organizations lose.
+critical_signals_force_tier: contain
+
+tiers:
+  # ---------------------------------------------------------------------------
+  - name: watch
+    threshold: 25
+    authority: automatic
+    actions: [notify]
+    accepted_impact: "None. Analyst is paged; no user-visible effect."
+    notify: ["soc-oncall"]
+
+  # ---------------------------------------------------------------------------
+  - name: friction
+    threshold: 40
+    authority: automatic
+    actions: [identity.revoke_sessions]
+    ceiling: {users: 50, service_principals: 5}
+    mandatory_review_minutes: 240
+    accepted_impact: >
+      Up to 50 users may be forced to re-authenticate without notice. A deployment must
+      replace this example with its own accepted-impact statement and helpdesk runbook.
+    notify: ["soc-oncall", "helpdesk"]
+
+  # ---------------------------------------------------------------------------
+  - name: contain
+    threshold: 65
+    authority: automatic
+    actions: [identity.disable_user, endpoint.isolate_host, identity.revoke_sessions, cloud.deactivate_keys, backup.lock_vault]
+    ceiling: {users: 10, hosts: 10, service_principals: 5, backup_vaults: 5}
+    mandatory_review_minutes: 720
+    accepted_impact: >
+      Up to 10 user accounts disabled and 10 endpoints network-isolated automatically, for up to
+      12 hours before mandatory IR-lead review. Production servers tagged criticality=high or
+      crown_jewel are excluded from automatic isolation (see protections) and escalate instead.
+      Compromised IAM users may have static keys deactivated; service principals may be disabled.
+      Backup vault governance locking is permitted automatically and requires administrator review.
+    notify: ["soc-oncall", "ir-lead", "it-ops-oncall"]
+
+  # ---------------------------------------------------------------------------
+  - name: sever
+    threshold: 85
+    authority: two_person
+    approver_roles: ["IR Lead", "CISO", "Business Owner"]
+    actions: [cloud.quarantine_account, identity.disable_service_principal, cloud.deactivate_keys,
+              identity.disable_user, endpoint.isolate_host]
+    ceiling: {users: 100, hosts: 100, cloud_accounts: 3, service_principals: 20}
+    mandatory_review_minutes: null   # manual review and recovery decision by the IR lead
+    accepted_impact: >
+      Quarantining a cloud account or disabling workload identities can take a business
+      service offline. Requires two distinct approvers from the listed roles, recorded in the
+      audit log with a ticket reference. Target: approvals within 10 minutes via the IR bridge
+      (rehearsed quarterly; see docs/tabletop.md).
+    notify: ["soc-oncall", "ir-lead", "ciso", "exec-bridge"]
+
+protections:
+  # Never automatic, regardless of score. Escalate to the stated authority.
+  principals:
+    - "breakglass-*"
+    - "svc-backup-*"
+    - "ceo@*"
+    - "cfo@*"
+  hosts:
+    - "dc0*"                 # domain controllers
+    - "*-erp-db-*"
+  criticality_at_least: crown_jewel   # from policy/business-context.yaml
+  escalate_to: two_person
+
+required_attestation_roles: ["CISO", "VP Engineering", "VP Operations"]
+
+# Illustrative digest attestations. They make edits visible in CI but do not establish
+# the signers' identities. Production approval belongs in a protected review system.
+attestations:
+  - {role: "CISO",           name: "A. Example",  date: 2026-08-23, digest: "3b46e11051e7c8b8ce2f1b3e65b6be37aa5b8cb0d63e067be38b020e41464b4b"}
+  - {role: "VP Engineering", name: "B. Example",  date: 2026-08-23, digest: "3b46e11051e7c8b8ce2f1b3e65b6be37aa5b8cb0d63e067be38b020e41464b4b"}
+  - {role: "VP Operations",  name: "C. Example",  date: 2026-08-23, digest: "3b46e11051e7c8b8ce2f1b3e65b6be37aa5b8cb0d63e067be38b020e41464b4b"}
+
+notes: >
+  Reviewed against NIST CSF 2.0 GV.RR / RS.MA, ISO 27001:2022 A.5.24-5.28, SOC 2 CC7.4.
+  A deployment must complete its own DPO and works-council review where applicable (see
+  docs/grc/gdpr.md). This policy does not replace the incident response plan; it illustrates
+  how to pre-authorize part of its initial response window.

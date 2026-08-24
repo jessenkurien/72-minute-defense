@@ -1,0 +1,73 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m ruff format --check .
+      - run: python -m ruff check .
+      - run: python -m pytest -q --cov=seventytwo --cov-report=term-missing --cov-fail-under=85
+
+  policy-gate:
+    # The public template stays unarmable. Any policy-body change must refresh every digest
+    # attestation and preserve all expected synthetic rehearsal outcomes.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e .
+      - name: Illustrative template digest attestations must verify
+        run: 72md policy verify
+      - name: Every scenario must behave as intended
+        run: 72md rehearse --out out --audit out/audit.jsonl --fail-if-late
+      - name: Audit chain must be intact
+        run: 72md audit verify --audit out/audit.jsonl
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: synthetic-rehearsal-evidence
+          path: out/
+
+  wheel-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python -m pip install build
+      - run: python -m build
+      - run: python -m venv /tmp/72md-smoke
+      - run: /tmp/72md-smoke/bin/python -m pip install dist/*.whl
+      - name: Installed package must work outside the source tree
+        working-directory: /tmp
+        run: |
+          /tmp/72md-smoke/bin/72md policy verify
+          /tmp/72md-smoke/bin/72md rehearse --out /tmp/72md-smoke-out --audit /tmp/72md-smoke-out/audit.jsonl --fail-if-late
+          /tmp/72md-smoke/bin/72md audit verify --audit /tmp/72md-smoke-out/audit.jsonl

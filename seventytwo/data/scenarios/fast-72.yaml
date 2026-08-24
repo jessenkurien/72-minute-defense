@@ -1,0 +1,48 @@
+name: fast-72
+description: "Stolen-credential login → dump → RMM → enumeration → backup tamper → staging → exfil at 72"
+attacker_exfil_minute: 72
+attacker_milestones:
+  - {minute: 0, label: "stolen-credential login"}
+  - {minute: 8, label: "credential dumping"}
+  - {minute: 16, label: "RMM tool installed"}
+  - {minute: 28, label: "mass file enumeration"}
+  - {minute: 42, label: "backup tampering"}
+  - {minute: 56, label: "data staged"}
+events:
+  - minute: 0
+    signal: anomalous_login
+    detect_delay: 6
+    source: sentinel
+    entity: {type: user, id: "j.doe@example.com", platform: entra}
+    related: [{type: host, id: "ws-4471", platform: defender}]
+  - minute: 8
+    signal: credential_dumping
+    detect_delay: 4
+    source: falcon
+    entity: {type: host, id: "ws-4471", platform: defender}
+    related: [{type: user, id: "j.doe@example.com", platform: entra}]
+  - minute: 16
+    signal: rmm_tool_installed
+    detect_delay: 2
+    source: sentinel
+    entity: {type: host, id: "ws-4471", platform: defender}
+    related: [{type: user, id: "j.doe@example.com", platform: entra}]
+  - minute: 28
+    signal: mass_file_enumeration
+    detect_delay: 3
+    source: splunk
+    entity: {type: user, id: "j.doe@example.com", platform: entra}
+    related: [{type: host, id: "ws-4471", platform: defender}]
+  - minute: 42
+    signal: backup_tamper
+    detect_delay: 1
+    source: sentinel
+    entity: {type: user, id: "j.doe@example.com", platform: entra}
+    related: [{type: host, id: "ws-4471", platform: defender}]
+  - minute: 56
+    signal: exfil_tool_present
+    detect_delay: 2
+    source: falcon
+    entity: {type: host, id: "ws-4471", platform: defender}
+    related: [{type: user, id: "j.doe@example.com", platform: entra}]
+approvals: []

@@ -1,0 +1,24 @@
+# Bundled copy of policy/business-context.yaml for installed-wheel defaults.
+organization: "Example Corp (template — replace)"
+
+services:
+  payments:        {criticality: crown_jewel, owner: "VP Payments",      rto_hours: 2}
+  erp:             {criticality: crown_jewel, owner: "CFO",              rto_hours: 4}
+  customer-portal: {criticality: high,        owner: "VP Product",       rto_hours: 8}
+  corp-it:         {criticality: standard,    owner: "IT Director",      rto_hours: 24}
+  dev:             {criticality: standard,    owner: "VP Engineering",   rto_hours: 24}
+
+assets:
+  - {id: "ceo@example.com", type: user, criticality: high, service: corp-it, owner: "CISO", platform: entra}
+  - {id: "svc-payments-*", type: service_principal, criticality: crown_jewel, service: payments, owner: "VP Payments", platform: aws}
+  - {id: "svc-backup-*", type: service_principal, criticality: crown_jewel, service: corp-it, owner: "IT Director", platform: aws}
+  - {id: "*@example.com", type: user, criticality: standard, service: corp-it, owner: "IT Director", platform: entra}
+  - {id: "dc0*", type: host, criticality: crown_jewel, service: corp-it, owner: "IT Director", platform: defender}
+  - {id: "pay-*", type: host, criticality: crown_jewel, service: payments, owner: "VP Payments", platform: crowdstrike}
+  - {id: "*-erp-db-*", type: host, criticality: crown_jewel, service: erp, owner: "CFO", platform: defender}
+  - {id: "web-*", type: host, criticality: high, service: customer-portal, owner: "VP Product", platform: crowdstrike}
+  - {id: "ws-*", type: host, criticality: standard, service: corp-it, owner: "IT Director", platform: defender}
+  - {id: "dev-*", type: host, criticality: standard, service: dev, owner: "VP Engineering", platform: crowdstrike}
+  - {id: "111111111111", type: cloud_account, criticality: crown_jewel, service: payments, owner: "VP Payments", platform: aws}
+  - {id: "222222222222", type: cloud_account, criticality: standard, service: dev, owner: "VP Engineering", platform: aws}
+  - {id: "prod-backup-vault", type: backup_vault, criticality: crown_jewel, service: corp-it, owner: "IT Director", platform: aws}

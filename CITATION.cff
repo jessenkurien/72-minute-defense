@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If The 72-Minute Defense informs your work, please cite it and credit Jessen Kurien."
+title: "The 72-Minute Defense"
+type: software
+version: 0.1.0
+authors:
+  - family-names: Kurien
+    given-names: Jessen
+repository-code: "https://github.com/jessenkurien/72-minute-defense"
+url: "https://github.com/jessenkurien/72-minute-defense"
+license: MIT
+abstract: >-
+  An open-source reference implementation for incident-response governance,
+  pre-authorized ransomware containment, policy-as-code, and synthetic rehearsal
+  against an external 72-minute exfiltration benchmark.
+keywords:
+  - ransomware
+  - incident response
+  - incident command
+  - ransomware containment
+  - policy as code
+  - security automation
+  - security leadership
+  - GRC
+  - tabletop exercise
+  - NIST CSF

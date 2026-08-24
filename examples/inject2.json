@@ -1,0 +1,50 @@
+[
+  {
+    "AlertName": "Anomalous sign-in location by user account",
+    "TimeGenerated": "2026-08-24T02:00:00Z",
+    "SystemAlertId": "sa-1001",
+    "Entities": [
+      {
+        "Type": "account",
+        "Name": "j.doe",
+        "UPNSuffix": "example.com"
+      },
+      {
+        "Type": "host",
+        "HostName": "ws-4471"
+      }
+    ]
+  },
+  {
+    "AlertName": "Suspicious credential dump (LSASS access)",
+    "TimeGenerated": "2026-08-24T02:06:00Z",
+    "SystemAlertId": "sa-1002",
+    "Entities": [
+      {
+        "Type": "host",
+        "HostName": "ws-4471"
+      },
+      {
+        "Type": "account",
+        "Name": "j.doe",
+        "UPNSuffix": "example.com"
+      }
+    ]
+  },
+  {
+    "AlertName": "Unapproved remote management tool installed",
+    "TimeGenerated": "2026-08-24T02:16:00Z",
+    "SystemAlertId": "sa-1003",
+    "Entities": [
+      {
+        "Type": "host",
+        "HostName": "ws-4471"
+      },
+      {
+        "Type": "account",
+        "Name": "j.doe",
+        "UPNSuffix": "example.com"
+      }
+    ]
+  }
+]

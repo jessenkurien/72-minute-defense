@@ -1,0 +1,35 @@
+name: crown-jewel-two-person
+description: "Fast intrusion on a crown-jewel payments host; two-person rule applies"
+attacker_exfil_minute: 72
+attacker_milestones:
+  - {minute: 0, label: "service-account token replay"}
+  - {minute: 10, label: "cloud recon"}
+  - {minute: 22, label: "logging disabled"}
+  - {minute: 40, label: "snapshot shared externally"}
+events:
+  - minute: 0
+    signal: token_theft
+    detect_delay: 5
+    source: guardduty
+    entity: {type: service_principal, id: "svc-payments-deploy", platform: aws}
+    related: [{type: host, id: "pay-app-03", platform: crowdstrike}, {type: cloud_account, id: "111111111111", platform: aws}]
+  - minute: 10
+    signal: cloud_recon
+    detect_delay: 3
+    source: guardduty
+    entity: {type: service_principal, id: "svc-payments-deploy", platform: aws}
+  - minute: 22
+    signal: logging_disabled
+    detect_delay: 2
+    source: guardduty
+    entity: {type: cloud_account, id: "111111111111", platform: aws}
+    related: [{type: service_principal, id: "svc-payments-deploy", platform: aws}]
+  - minute: 40
+    signal: snapshot_shared_external
+    detect_delay: 2
+    source: guardduty
+    entity: {type: cloud_account, id: "111111111111", platform: aws}
+    related: [{type: service_principal, id: "svc-payments-deploy", platform: aws}]
+approvals:
+  - {role: "IR Lead", name: "on-call IR lead", response_minutes: 8}
+  - {role: "CISO", name: "CISO", response_minutes: 14}

@@ -1,0 +1,12 @@
+include CHANGELOG.md
+include CITATION.cff
+include CONTRIBUTING.md
+include LICENSE
+include NOTICE
+include README.md
+include SECURITY.md
+include THREAT_MODEL.md
+recursive-include docs *
+recursive-include examples *
+recursive-include policy *
+recursive-include scenarios *

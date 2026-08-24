@@ -1,0 +1,32 @@
+[
+  {
+    "detail": {
+      "type": "CredentialAccess:IAMUser/AnomalousBehavior",
+      "id": "gd-1",
+      "updatedAt": "2026-08-24T03:00:00Z",
+      "severity": 8,
+      "accountId": "222222222222",
+      "resource": {
+        "accessKeyDetails": {
+          "userName": "svc-dev-ci",
+          "userType": "AssumedRole"
+        }
+      }
+    }
+  },
+  {
+    "detail": {
+      "type": "Stealth:IAMUser/CloudTrailLoggingDisabled",
+      "id": "gd-2",
+      "updatedAt": "2026-08-24T03:12:00Z",
+      "severity": 8,
+      "accountId": "222222222222",
+      "resource": {
+        "accessKeyDetails": {
+          "userName": "svc-dev-ci",
+          "userType": "AssumedRole"
+        }
+      }
+    }
+  }
+]

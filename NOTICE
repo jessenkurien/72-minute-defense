@@ -1,0 +1,15 @@
+The 72-Minute Defense
+Copyright (c) 2026 Jessen Kurien. Licensed under the MIT License (see LICENSE).
+
+This project references MITRE ATT&CK® technique identifiers in its precursor catalog.
+MITRE ATT&CK and ATT&CK are registered trademarks of The MITRE Corporation. This project
+is not affiliated with or endorsed by The MITRE Corporation.
+
+Attacker timing benchmarks are cited from the Palo Alto Networks Unit 42 Global Incident
+Response Report 2026. Facts are not subject to copyright; the report itself is the property
+of Palo Alto Networks.
+
+Microsoft, Entra, Defender, Okta, CrowdStrike, Falcon, Amazon Web Services, and other product
+names are trademarks of their respective owners and are used solely to identify the platforms
+this software integrates with. This project is not affiliated with, sponsored by, or endorsed
+by any of them.
