@@ -109,6 +109,15 @@ Illustrative policy digest checks valid; public template blocked from live execu
 
 The governance problem is global, but authority, employment law, privacy obligations, sector rules, terminology, and response procedures are local. Treat the 72-minute benchmark as an external stress-test target—not a prediction, service-level agreement, or universal threshold. Adapt the policy with local incident-response leadership, legal counsel, privacy/DPO teams, works councils or employee representatives where applicable, asset owners, and relevant regulators. Framework and regulatory mappings are navigation aids; they do not establish compliance in any jurisdiction.
 
+## Incident leadership series
+
+This project is part of an open-source cyber leadership portfolio:
+
+- **[Cyber Incident Commander Toolkit](https://github.com/jessenkurien/cyber-incident-commander-toolkit)** — coordinates people, objectives, evidence, decisions, and executive communication during a cyber incident.
+- **[The 72-Minute Defense](https://github.com/jessenkurien/72-minute-defense)** — defines which containment actions can be pre-authorized and rehearses whether the organization can act before the attacker's clock expires.
+
+Together, they connect incident command with governed, measurable containment.
+
 ## References and attribution
 
 - Palo Alto Networks Unit 42, [Global Incident Response Report 2026](https://www2.paloaltonetworks.com/resources/research/unit-42-incident-response-report): quickest-quartile time to exfiltration of 72 minutes and identity weaknesses in 89% of investigations.
