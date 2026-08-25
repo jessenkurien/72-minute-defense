@@ -4,6 +4,12 @@
 
 Created and maintained by [Jessen Kurien](https://github.com/jessenkurien).
 
+> [!IMPORTANT]
+> **Reference implementation:** This project is intended for research, evaluation, and
+> organizational adaptation. It is dry-run by default. It is not a substitute for
+> organization-specific legal, regulatory, privacy, or production-security review, and it
+> does not establish compliance or operating effectiveness.
+
 [![ci](https://github.com/jessenkurien/72-minute-defense/actions/workflows/ci.yml/badge.svg)](https://github.com/jessenkurien/72-minute-defense/actions/workflows/ci.yml)
 ![policy gate](https://img.shields.io/badge/policy%20gate-template%20verified%20%2B%20rehearsed-0ca30c)
 ![tests](https://img.shields.io/badge/tests-57%20passing-0ca30c)
@@ -118,6 +124,24 @@ This project is part of an open-source cyber leadership portfolio:
 
 Together, they connect incident command with governed, measurable containment.
 
+## Community and commercial use
+
+### Community/reference implementation
+
+This public repository is an open-source reference implementation for learning, evaluation,
+rehearsal, and organization-specific adaptation. The MIT-licensed project is provided without
+a deployment commitment, support service, warranty, or assurance that its illustrative policy
+is appropriate for a particular environment. Use the safety posture, threat model, and staged
+validation guidance before considering any live integration.
+
+### Commercial implementation, integration, and advisory services
+
+Production implementation, organization-specific policy design, vendor and workflow
+integration, incident-command assessments, tabletop exercises, and advisory services are
+separate from the community reference implementation. Organizations interested in
+authority-model design, incident-command assessments, tabletop exercises, or implementation
+pilots may contact the project author through [Jessen Kurien's GitHub profile](https://github.com/jessenkurien).
+
 ## References and attribution
 
 - Palo Alto Networks Unit 42, [Global Incident Response Report 2026](https://www2.paloaltonetworks.com/resources/research/unit-42-incident-response-report): quickest-quartile time to exfiltration of 72 minutes and identity weaknesses in 89% of investigations.
@@ -133,4 +157,7 @@ The MIT License permits reuse, modification, and redistribution subject to retai
 
 ## License
 
-MIT. Built by [Jessen Kurien](https://github.com/jessenkurien) — CISM, CISA, cybersecurity and incident-response leadership. Contributions are welcome under the DCO; see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+Copyright © 2026 Jessen Kurien. Licensed under the MIT License; see [`LICENSE`](LICENSE) and
+[`NOTICE`](NOTICE). Built by [Jessen Kurien](https://github.com/jessenkurien) — CISM, CISA,
+cybersecurity and incident-response leadership. Contributions are welcome under the DCO; see
+[`CONTRIBUTING.md`](CONTRIBUTING.md).

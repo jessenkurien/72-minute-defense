@@ -4,6 +4,9 @@ All notable changes to this project will be documented here.
 
 ## Unreleased
 
+- Clarified the community/reference and commercial engagement boundaries, added a prominent
+  dry-run and review notice, and expanded private vulnerability-reporting and supported-version
+  guidance.
 - Added durable creator attribution to generated JSON, Markdown, SVG, and dashboard artifacts.
 - Added `CITATION.cff`, international-use guidance, discoverability language, and a social-preview asset.
 - Pinned GitHub Actions to immutable commits and added an installed-wheel smoke test.

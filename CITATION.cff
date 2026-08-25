@@ -3,6 +3,7 @@ message: "If The 72-Minute Defense informs your work, please cite it and credit 
 title: "The 72-Minute Defense"
 type: software
 version: 0.1.0
+date-released: "2026-08-24"
 authors:
   - family-names: Kurien
     given-names: Jessen
